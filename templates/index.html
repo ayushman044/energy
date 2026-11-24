@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% from "_card.html" import card with context %}
+{% block content %}
+<section class="hero">
+  <h1>Research on the materials and reactions behind clean energy.</h1>
+  <p>Browse peer-reviewed papers across seven topics. Open any paper to read it in your browser.</p>
+</section>
+<section>
+  <h2>Topics</h2>
+  <ul class="topics">
+    {% for t in topics %}
+    <li style="--c:{{ t.color }}"><a href="{{ url_for('topic', slug=t.slug) }}">
+      <span class="name">{{ t.name }}</span><span class="blurb">{{ t.blurb }}</span></a></li>
+    {% endfor %}
+  </ul>
+</section>
+<section>
+  <h2>Recently added</h2>
+  {% if latest %}<div class="papers">{% for p in latest %}{{ card(p) }}{% endfor %}</div>
+  {% else %}<p class="empty">No papers yet. The admin can add the first one from the dashboard.</p>{% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% macro card(p) %}
+<a class="paper" href="{{ url_for('paper', pid=p.id) }}" style="--c:{{ topic_map[p.topic].color }}">
+  <h3>{{ p.title }}</h3>
+  <p class="meta">{{ p.authors }}{% if p.journal %}, <i>{{ p.journal }}</i>{% endif %}{% if p.year %} ({{ p.year }}){% endif %}</p>
+  <p class="tag">{{ topic_map[p.topic].name }}</p>
+</a>
+{% endmacro %}

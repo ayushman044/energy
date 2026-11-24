@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ p.title }}{% endblock %}
+{% block content %}
+{% set t = topic_map[p.topic] %}
+<article style="--c:{{ t.color }}">
+  <a class="back" href="{{ url_for('topic', slug=p.topic) }}">{{ t.name }}</a>
+  <h1 class="page">{{ p.title }}</h1>
+  <p class="meta">{{ p.authors }}{% if p.journal %}, <i>{{ p.journal }}</i>{% endif %}{% if p.year %} ({{ p.year }}){% endif %}</p>
+  {% if p.doi %}<p class="meta">DOI: <a href="https://doi.org/{{ p.doi }}" rel="noopener" target="_blank">{{ p.doi }}</a></p>{% endif %}
+  {% if p.abstract %}<h2>Abstract</h2><p class="abstract">{{ p.abstract }}</p>{% endif %}
+  <p><a class="btn" href="{{ url_for('pdf', pid=p.id, dl=1) }}">Download PDF</a></p>
+  <iframe class="viewer" src="{{ url_for('pdf', pid=p.id) }}" title="{{ p.title }}"></iframe>
+</article>
+{% endblock %}

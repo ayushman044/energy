@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page">Dashboard</h1>
+<h2>Upload a paper</h2>
+<form method="post" action="{{ url_for('upload') }}" enctype="multipart/form-data" class="form">
+  <input type="hidden" name="_csrf" value="{{ csrf }}">
+  <label>Title<input name="title" required maxlength="300"></label>
+  <label>Topic<select name="topic" required>{% for t in topics %}<option value="{{ t.slug }}">{{ t.name }}</option>{% endfor %}</select></label>
+  <label>Authors<input name="authors" placeholder="A. Kumar, B. Singh"></label>
+  <div class="row">
+    <label>Journal<input name="journal"></label>
+    <label>Year<input name="year" inputmode="numeric" maxlength="4"></label>
+    <label>DOI<input name="doi" placeholder="10.1000/xyz123"></label>
+  </div>
+  <label>Abstract<textarea name="abstract" rows="5"></textarea></label>
+  <label>PDF file (max 25 MB)<input type="file" name="pdf" accept="application/pdf" required></label>
+  <button class="btn">Publish paper</button>
+</form>
+<h2>Published papers ({{ papers|length }})</h2>
+{% for p in papers %}
+<div class="admin-row" style="--c:{{ topic_map[p.topic].color }}">
+  <a href="{{ url_for('paper', pid=p.id) }}">{{ p.title }}</a><span class="tag">{{ topic_map[p.topic].name }}</span>
+  <form method="post" action="{{ url_for('delete', pid=p.id) }}" onsubmit="return confirm('Delete this paper?')">
+    <input type="hidden" name="_csrf" value="{{ csrf }}"><button class="link danger">Delete</button></form>
+</div>
+{% else %}<p class="empty">Nothing published yet.</p>{% endfor %}
+{% endblock %}

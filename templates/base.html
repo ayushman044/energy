@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Energy Materials Library{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head><body>
+<header class="top">
+  <a class="brand" href="{{ url_for('index') }}">Energy Materials Library</a>
+  <form action="{{ url_for('search') }}" class="search" role="search">
+    <input name="q" placeholder="Search title, author, keyword" value="{{ request.args.get('q','') }}" aria-label="Search papers">
+  </form>
+  <nav>
+    {% if is_admin %}<a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="_csrf" value="{{ csrf }}"><button class="link">Log out</button></form>
+    {% else %}<a href="{{ url_for('login') }}">Admin</a>{% endif %}
+  </nav>
+</header>
+<main>
+  {% for cat, msg in get_flashed_messages(with_categories=true) %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+  {% block content %}{% endblock %}
+</main>
+<footer>Papers are published by the library admin. Readers can browse, view and download.</footer>
+</body></html>
